@@ -57,7 +57,10 @@ async function yahooSeries(symbol, startDate, endDate) {
   if (!r) throw new Error(j?.chart?.error?.description || "No Yahoo data");
   const ts = r.timestamp || [];
   const q = r.indicators?.quote?.[0]?.close || [];
-  const rows = ts.map((x,i)=>({date:ymd(new Date(x*1000)), close:Number(q[i])})).filter(x=>Number.isFinite(x.close));
+  const rows = ts
+    .map((x,i)=>({date:ymd(new Date(x*1000)), rawClose:q[i]}))
+    .filter(x=>x.rawClose !== null && x.rawClose !== undefined && Number.isFinite(Number(x.rawClose)) && Number(x.rawClose) > 0)
+    .map(x=>({date:x.date, close:Number(x.rawClose)}));
   return { rows, currency:r.meta?.currency || null, symbol:r.meta?.symbol || symbol };
 }
 
