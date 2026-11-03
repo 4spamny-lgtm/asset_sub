@@ -44,6 +44,19 @@ dialog{border:0;border-radius:22px;padding:0;width:min(650px,calc(100% - 24px));
 .av8-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.av8-kpi{padding:12px;background:#f8faff;border-radius:12px;font-size:12px}.av8-kpi strong{display:block;font-size:17px;margin-top:5px}.av8-warning{padding:10px;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;color:#92400e;font-size:12px;margin:9px 0}.av8-muted{font-size:12px;color:#72809a;line-height:1.6}.av8-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.av8-row input,.av8-row select{padding:8px;border:1px solid #d9e0ed;border-radius:9px;max-width:220px}.av8-row textarea{width:100%}.av8-history{display:grid;gap:7px;max-height:260px;overflow:auto}.av8-history-item{border:1px solid #e7ecf5;border-radius:10px;padding:10px;font-size:12px}.av8-history-item button{margin-left:6px}.av8-code{white-space:pre-wrap;word-break:break-word;font-size:12px;max-height:220px;overflow:auto;background:#f8faff;padding:11px;border-radius:10px}
 .av8-flow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:13px}.av8-step{min-width:0;padding:15px 16px;border:1px solid #e7ecf5;border-radius:14px;background:#fafbff}.av8-step h4{margin:5px 0 7px;font-size:14px}.av8-step p{margin:0;font-size:12px;color:#64748b;line-height:1.65}.av8-step-label{font-size:12px;font-weight:900;color:#5658e8}.av8-compare{display:grid;gap:8px;margin-top:10px}.av8-compare-row{display:grid;grid-template-columns:140px 1fr 1fr;gap:8px;border-bottom:1px solid #e7ecf5;padding:7px 0;font-size:12px}.av8-compare-row span{white-space:pre-wrap;overflow-wrap:anywhere}.av8-compare-row strong{color:#64748b}.av8-compare-row.av8-long{grid-template-columns:1fr 1fr}.av8-compare-row.av8-long strong{grid-column:1/-1}.av8-compare-row .av8-rich{white-space:pre-wrap;line-height:1.65;overflow-wrap:anywhere}.av8-compare-row .av8-rich b{font-weight:800;color:#273550}.av8-change-summary{background:#f7f9fe;border:1px solid #dfe6f5;border-radius:12px;padding:12px 14px;margin:12px 0 14px;font-size:12.5px;line-height:1.65}.av8-change-summary h4{font-size:13px;margin:0 0 6px;color:#273550}.av8-change-summary p{margin:4px 0;color:#465572}.av8-change-summary strong{color:#303b94}.av8-history-item{display:flex;align-items:center;justify-content:space-between;gap:8px}.av8-history-item .av8-history-text{min-width:0;line-height:1.55}@media(max-width:760px){.av8-flow{grid-template-columns:1fr}}@media(max-width:650px){.av8-compare-row{grid-template-columns:85px 1fr 1fr}.av8-compare-row.av8-long{grid-template-columns:1fr 1fr}}
 @media(max-width:650px){.av8-kpis{grid-template-columns:1fr}.av8-panel{padding:11px}}
+
+/* 시장 전략: 분석 결과 및 이력 버튼을 제목과 한 줄에 배치 */
+.av8-strategy-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.av8-strategy-heading{flex:1 1 260px;min-width:0}
+.av8-strategy-heading h3{margin:0 0 5px}
+.av8-strategy-controls{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+.av8-strategy-control{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.av8-control-label{font-size:11px;font-weight:850;color:#687791}
+.av8-strategy-buttons{display:flex;gap:7px;flex-wrap:wrap}
+.av8-strategy-controls .btn{padding:9px 12px;font-size:12px;white-space:nowrap}
+.av8-history-picker{display:flex;align-items:center;gap:9px;margin:10px 0 12px;font-size:12px;color:#64748b}
+.av8-history-picker select{flex:1;max-width:260px}
+@media(max-width:650px){.av8-strategy-head{align-items:stretch}.av8-strategy-controls{width:100%;gap:12px}.av8-strategy-control{flex:1 1 135px}.av8-strategy-controls .btn{padding:9px 10px}.av8-strategy-buttons{gap:5px}}
 </style>
 </head>
 <body>
@@ -195,13 +208,25 @@ dialog{border:0;border-radius:22px;padding:0;width:min(650px,calc(100% - 24px));
     </div>
 
 <div class="av8-panel" id="av8StrategyTools">
- <h3>AI 시장분석 · 전략 기록</h3>
- <p class="av8-muted">ChatGPT에서 분석한 내용을 저장하고 과거 판단과 비교합니다. 외부 AI·시세를 앱이 자동 조회하지는 않습니다.</p>
- <div id="av8Stale" class="av8-muted"></div>
- <div class="av8-flow">
-  <div class="av8-step"><div class="av8-step-label">분석 결과 반영</div><h4>ChatGPT JSON 결과</h4><p>분석 결과 JSON을 붙여넣고 기존 값과 비교한 뒤 저장할 수 있습니다.</p><div class="av8-actions"><button class="btn primary" id="av8ImportBtn">JSON 결과 업로드</button></div></div>
-  <div class="av8-step"><div class="av8-step-label">이전 판단과 비교</div><h4>시장 전략 이력</h4><div id="av8StrategyDiff" class="av8-muted"></div><div id="av8StrategyHistory" class="av8-history"></div><div class="av8-actions"><button class="btn" id="av8HistoryExport">전략 이력 내보내기</button></div></div>
- </div>
+  <div class="av8-strategy-head">
+    <div class="av8-strategy-heading">
+      <h3>AI 시장분석 · 전략 기록</h3>
+      <div id="av8Stale" class="av8-muted"></div>
+    </div>
+    <div class="av8-strategy-controls">
+      <div class="av8-strategy-control">
+        <span class="av8-control-label">분석 결과 반영</span>
+        <button class="btn primary" id="av8ImportBtn" type="button">JSON 결과 업로드</button>
+      </div>
+      <div class="av8-strategy-control">
+        <span class="av8-control-label">이전 판단과 비교</span>
+        <div class="av8-strategy-buttons">
+          <button class="btn" id="av8HistoryCompare" type="button">비교</button>
+          <button class="btn" id="av8HistoryExport" type="button">이력 내보내기</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
   </section>
 
@@ -653,7 +678,7 @@ dialog{border:0;border-radius:22px;padding:0;width:min(650px,calc(100% - 24px));
 
 
 <dialog id="av8AiDialog"><div class="modal"><h3>AI 시장 분석 JSON 가져오기</h3><p>ChatGPT가 작성한 JSON을 붙여넣고 미리보기를 확인한 다음 저장하세요. 저장 전에 기존 분석과 신규 분석의 차이를 확인할 수 있습니다. JSON에서 누락된 항목은 유지하고, null이 명시된 지표는 확인 불가로 저장합니다.</p><textarea id="av8AiText" class="input" rows="11" placeholder='{"asOf":"2026-11-03","breadthPct":null,"treasury10y":null,"nasdaqDrawdown":null,"goldDrawdown":null,"kospiDrawdown":null,"diagnosis":"...","action":"...","nextCondition":"...","conditionStatus":"..."}'></textarea><div class="av8-actions"><button id="av8AiPreviewBtn" class="btn">검증·미리보기</button></div><div id="av8AiPreview" class="av8-code" aria-live="polite"></div><div class="modal-actions"><button class="btn" id="av8AiCancel">취소</button><button class="btn primary" id="av8AiApply" disabled>확인 후 저장</button></div></div></dialog>
-<dialog id="av8HistoryDialog"><div class="modal"><h3>이전 전략과 현재 전략 비교</h3><div id="av8HistoryComparison"></div><div class="modal-actions"><button class="btn" id="av8HistoryClose">닫기</button></div></div></dialog>
+<dialog id="av8HistoryDialog"><div class="modal"><h3>이전 전략과 현재 전략 비교</h3><label class="av8-history-picker" id="av8HistoryPickerWrap">비교할 이전 기록 <select class="select" id="av8HistoryPicker"></select></label><div id="av8HistoryComparison"></div><div class="modal-actions"><button class="btn" id="av8HistoryClose">닫기</button></div></div></dialog>
 
 <script>
 const SAMPLE={"version":4,"meta":{"app":"AssetView","currency":"KRW","updatedAt":"","sampleNote":"빈 초기 데이터. JSON 불러오기로 자산 데이터를 입력하세요."},"settings":{"priceApiEndpoint":"","historicalPriceApiEndpoint":"","autoRefreshPrices":false,"autoEstimateSnapshotQty":true,"marketSignal":{"asOf":"","breadthPct":null,"rspSpyTrend":"flat","sp500Drawdown":null,"treasury10y":null,"nasdaqDrawdown":null,"goldDrawdown":null,"kospiDrawdown":null,"diagnosis":"","action":"","nextCondition":"","conditionStatus":"","updatedAt":""}},"accountCategories":[{"id":"acct-general","name":"일반","color":"#3B82F6"},{"id":"acct-isa","name":"ISA","color":"#8B5CF6"},{"id":"acct-pension","name":"연금저축","color":"#14B8A6"},{"id":"acct-irp","name":"IRP","color":"#F59E0B"},{"id":"acct-bank","name":"은행","color":"#06B6D4"}],"assetCategories":[{"id":"cat-equity","name":"주식","color":"#5B5CF0","valuationMode":"quantity_price_fallback","depositFields":false},{"id":"cat-cash","name":"현금(입출금)","color":"#06B6D4","valuationMode":"direct_amount","depositFields":false},{"id":"cat-deposit","name":"예적금","color":"#0EA5E9","valuationMode":"direct_amount","depositFields":true},{"id":"cat-bond","name":"채권","color":"#10B981","valuationMode":"quantity_price_fallback","depositFields":false},{"id":"cat-realestate","name":"부동산","color":"#F59E0B","valuationMode":"direct_amount","depositFields":false},{"id":"cat-fund","name":"펀드·신탁","color":"#EC4899","valuationMode":"direct_amount","depositFields":false},{"id":"cat-alternative","name":"대체자산","color":"#8B5CF6","valuationMode":"direct_amount","depositFields":false},{"id":"cat-other","name":"기타","color":"#64748B","valuationMode":"direct_amount","depositFields":false}],"assetClasses":[{"id":"ac-us-equity","name":"미국주식","color":"#5B5CF0","targetPct":null},{"id":"ac-kr-equity","name":"한국주식","color":"#4F46E5","targetPct":null},{"id":"ac-global-equity","name":"기타 해외주식","color":"#818CF8","targetPct":null},{"id":"ac-bond","name":"채권","color":"#10B981","targetPct":null},{"id":"ac-cashlike","name":"현금성","color":"#06B6D4","targetPct":null},{"id":"ac-gold","name":"금","color":"#F59E0B","targetPct":null},{"id":"ac-commodity-other","name":"기타 원자재","color":"#D97706","targetPct":null},{"id":"ac-realestate","name":"부동산","color":"#EC4899","targetPct":null},{"id":"ac-alternative","name":"대체자산","color":"#8B5CF6","targetPct":null},{"id":"ac-other","name":"기타","color":"#64748B","targetPct":null}],"accounts":[],"assets":[],"activityLog":[],"monthlySnapshots":[],"notes":[],"reconstructedTrades":[]},KEY="assetview.sample.v6";
@@ -1662,8 +1687,31 @@ function av8ChangeSummary(before,after){
  return '<section class="av8-change-summary"><h4>핵심 변화 요약</h4>'+details.map(x=>'<p>'+x+'</p>').join('')+'</section>';
 }
 function av8ComparisonHtml(before,after){return av8ChangeSummary(before,after)+'<div class="av8-compare"><div class="av8-compare-row"><strong>항목</strong><strong>이전 분석</strong><strong>현재 / 새 분석</strong></div>'+av8CompareFields.map(([label,key])=>{const a=av8SafeText(before?.[key]),b=av8SafeText(after?.[key]),long=a.length>42||b.length>42;return `<div class="av8-compare-row${long?' av8-long':''}"><strong>${esc(label)}</strong><span class="av8-rich">${av8RichText(a)}</span><span class="av8-rich">${av8RichText(b)}</span></div>`}).join('')+'</div>'}
-function av8RenderHistory(){av8Ensure();const list=state.marketHistory.slice().reverse(),cur=state.settings?.marketSignal||{};$('av8StrategyHistory').innerHTML=list.slice(0,30).map(h=>`<div class="av8-history-item"><span class="av8-history-text"><b>${esc(h.data.asOf||'날짜 없음')}</b> · ${esc((h.data.action||h.data.diagnosis||'').replace(/\*\*/g,'').slice(0,120))}</span><button class="mini" onclick="av8ViewHistory('${h.id}')">비교</button></div>`).join('')||'<p class="av8-muted">이전 분석 기록이 없습니다. 새 분석을 저장하면 기존 분석이 여기에 보관됩니다.</p>';const prev=list[0]?.data;$('av8StrategyDiff').textContent=prev?`현재 분석 ${cur.asOf||'-'} / 이전 분석 ${prev.asOf||'-'} · 기록 ${state.marketHistory.length}건`:'이전 분석과 비교할 저장 기록이 없습니다.'}
-window.av8ViewHistory=id=>{const h=state.marketHistory.find(x=>x.id===id);if(!h)return;$('av8HistoryComparison').innerHTML=av8ComparisonHtml(h.data,state.settings?.marketSignal||{});$('av8HistoryDialog').showModal()};
+function av8RenderHistory(){
+ av8Ensure();
+ const list=state.marketHistory.slice().reverse(), picker=$('av8HistoryPicker');
+ if(!picker)return;
+ const previous=picker.value;
+ picker.innerHTML=list.map(h=>`<option value="${esc(h.id)}">${esc(h.data?.asOf||'날짜 없음')}</option>`).join('');
+ if(list.some(h=>h.id===previous))picker.value=previous;
+ $('av8HistoryCompare').disabled=list.length===0;
+}
+window.av8ViewHistory=id=>{
+ const h=state.marketHistory.find(x=>x.id===id);
+ if(!h)return;
+ $('av8HistoryPicker').value=h.id;
+ $('av8HistoryComparison').innerHTML=av8ComparisonHtml(h.data,state.settings?.marketSignal||{});
+ $('av8HistoryDialog').showModal();
+};
+$('av8HistoryCompare').onclick=()=>{
+ av8RenderHistory();
+ const id=$('av8HistoryPicker').value;
+ if(id)av8ViewHistory(id);
+};
+$('av8HistoryPicker').onchange=()=>{
+ const h=state.marketHistory.find(x=>x.id===$('av8HistoryPicker').value);
+ if(h)$('av8HistoryComparison').innerHTML=av8ComparisonHtml(h.data,state.settings?.marketSignal||{});
+};
 $('av8HistoryClose').onclick=()=>$('av8HistoryDialog').close();
 function av8Render(){av8Ensure();av8RenderHistory();const d=marketSignalData().asOf,days=d?Math.floor((new Date()-new Date(d+'T00:00:00'))/86400000):null;$('av8Stale').textContent=days==null?'시장 신호 기준일이 없습니다.':`시장 지표 기준: ${d} · ${days<0?'미래 날짜 확인 필요':days+'일 경과'}${days>14?' · ⚠ 최신 시장 지표 재확인 권장':''}`;}
 function av8BuildPrompt(){const snaps=av8GetMonths(),s=snaps.at(-1),a=av8Operational(s),tot=sum(a.map(x=>Number(x.value)||0)),groups={};a.forEach(x=>{const k=assetClass(x.assetClassId)?.name||x.assetClassId||'기타';groups[k]=(groups[k]||0)+(Number(x.value)||0)});const rows=Object.entries(groups).map(([k,v])=>`${k}: ${won(v)} (${tot?(v/tot*100).toFixed(1):0}%)`).join('\n');const last=marketSignalData(),p=state.marketHistory.at(-1)?.data;return `첨부한 AssetView JSON 또는 다음 요약은 직전 월말 자산 현황이다. 보유자산과 시장 환경을 함께 분석해줘. 공개 웹자료를 직접 찾아 각 지표의 기준일·출처를 밝혀야 하며, 확인되지 않은 값은 추정하지 말고 null로 둬.\n\n[월말 운용자산 요약] ${s?.month||'기록 없음'} · 합계 ${won(tot)}\n${rows}\n[직전 시장판단] 기준 ${last.asOf||'-'}\n시장진단: ${last.diagnosis||'-'}\n현재 행동: ${last.action||'-'}\n다음 조건: ${last.nextCondition||'-'}\n[이전 시장판단] ${p?`기준 ${p.asOf||'-'} / 행동 ${p.action||'-'}`:'없음'}\n\n오늘 기준 최신 자료로 1) S&P500 200일선 상회비율 2) 미 10년물 금리 3) Nasdaq-100 52주 고점 대비 4) 금 52주 고점 대비 5) KOSPI 52주 고점 대비를 확인해줘. 상승·하락의 근거, 환율·실적·시장폭·금리·추세를 함께 고려해 자산군별 미국주식·한국주식·금/원자재·채권/현금성·종합판단을 1~2문장으로 진단해줘. 이어서 다음 한 달의 실제 행동(1~3문장), 행동을 바꿀 구체적인 조건 1~3개, 각 조건의 수치 비교 결과(충족/일부 충족/미충족)를 분리해 작성해줘. 단일종목 쏠림과 성장주·현금성 비중을 고려하고 하락률만으로 매수를 권하지 마. 지난 분석과 다른 판단이 있다면 무엇이 달라졌는지 알려줘. 각 핵심 판단에 **강조**를 사용해줘.\n\n마지막에는 아래 JSON 객체를 코드블록 하나로만 추가해줘. 수치는 부호를 포함한 숫자, 기준일은 YYYY-MM-DD, 불명확한 값은 null. 'diagnosis'에는 자산군별로 줄바꿈해서 적어줘. 추가 설명이나 마크다운을 JSON 코드블록 내부에 넣지 마.\n{\"asOf\":\"YYYY-MM-DD\",\"breadthPct\":null,\"treasury10y\":null,\"nasdaqDrawdown\":null,\"goldDrawdown\":null,\"kospiDrawdown\":null,\"sp500Drawdown\":null,\"diagnosis\":\"미국주식: ...\\n한국주식: ...\\n금/원자재: ...\\n채권/현금성: ...\\n종합판단: ...\",\"action\":\"...\",\"nextCondition\":\"...\",\"conditionStatus\":\"...\",\"sources\":[{\"indicator\":\"...\",\"date\":\"YYYY-MM-DD\",\"url\":\"https://...\"}],\"changeReason\":\"이전 판단과 달라진 점\"}\n`;}
